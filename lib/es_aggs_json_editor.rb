@@ -1,4 +1,5 @@
 require 'es_aggs_json_editor/version'
+require 'es_aggs_json_editor/assets'
 require 'json'
 
 module EsAggsJsonEditor
