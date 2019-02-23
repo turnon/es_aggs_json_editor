@@ -37,7 +37,7 @@ module EsAggsJsonEditor
   end
 
   def templates
-    choices.keys.map do |k|
+    tmpls = choices.keys.map do |k|
       {
         text: k,
         value: {
@@ -47,6 +47,11 @@ module EsAggsJsonEditor
         }
       }
     end
+    tmpls << {text: 'bool', value: basic_json}
+  end
+
+  def basic_json
+    {bool: {must: [], must_not: []}}
   end
 
   def options
@@ -64,7 +69,6 @@ module EsAggsJsonEditor
   end
 
   def js_basic_json
-    basic_json = {bool: {must: [], must_not: []}}
     "var json=#{basic_json.to_json};"
   end
 
