@@ -57,7 +57,7 @@ module EsAggsJsonEditor
   end
 
   def basic_json
-    {bool: {must: [], must_not: []}}
+    @basic_json || {bool: {must: [], must_not: []}}
   end
 
   def options
