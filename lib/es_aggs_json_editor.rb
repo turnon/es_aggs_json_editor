@@ -25,13 +25,18 @@ module EsAggsJsonEditor
     "(function(){"\
       "#{js_basic_json}"\
       "#{js_options}"\
-      "var container = document.getElementById('jsoneditor');"\
+      "var container = document.getElementById('#{id}');"\
       "var editor = new JSONEditor(container, options, json);"\
       "editor.expandAll();"\
+      "return editor;"\
     "})()"
   end
 
   private
+
+  def id
+    @id || 'jsoneditor'
+  end
 
   def choices
     @choices ||= {}
