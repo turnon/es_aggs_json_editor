@@ -20,10 +20,18 @@ module EsAggsJsonEditor
     end
 
     choices[mapping_name] = {'enum' => enum, 'append' => append}
+
+    add_template({
+      text: "terms:#{mapping_name}",
+      value: {terms: {mapping_name => []}}
+    })
   end
 
   def match_phrase field
-    match_phrases << field
+    add_template({
+      text: "match_phrase:#{field}",
+      value: {match_phrase: {field => ''}}
+    })
   end
 
   def to_js
@@ -47,31 +55,12 @@ module EsAggsJsonEditor
     @choices ||= {}
   end
 
-  def match_phrases
-    @match_phrases ||= Set.new
+  def add_template tmpl
+    (@templates ||= []) << tmpl
   end
 
   def templates
-    tmpls = choices.keys.map do |k|
-      {
-        text: k,
-        value: {
-          terms: {
-            k => []
-          }
-        }
-      }
-    end
-    match_phrases.each do |field|
-      tmpls << {
-        text: "match_phrase:#{field}",
-        value: {
-          match_phrase: {
-            "#{field}" => ''
-          }
-        }
-      }
-    end
+    tmpls = @templates.dup
     tmpls << {text: 'bool', value: basic_json}
   end
 
