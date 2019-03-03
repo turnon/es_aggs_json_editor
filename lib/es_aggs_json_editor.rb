@@ -34,6 +34,13 @@ module EsAggsJsonEditor
     })
   end
 
+  def match field
+    add_template({
+      text: "match:#{field}",
+      value: {match: {field => ''}}
+    })
+  end
+
   def to_js
     "(function(){"\
       "#{js_basic_json}"\
