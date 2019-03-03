@@ -1,6 +1,7 @@
 require 'es_aggs_json_editor/version'
 require 'es_aggs_json_editor/assets'
 require 'json'
+require 'set'
 
 module EsAggsJsonEditor
   attr_reader :aggs
@@ -19,6 +20,10 @@ module EsAggsJsonEditor
     end
 
     choices[mapping_name] = {'enum' => enum, 'append' => append}
+  end
+
+  def match_phrase field
+    match_phrases << field
   end
 
   def to_js
@@ -42,6 +47,10 @@ module EsAggsJsonEditor
     @choices ||= {}
   end
 
+  def match_phrases
+    @match_phrases ||= Set.new
+  end
+
   def templates
     tmpls = choices.keys.map do |k|
       {
@@ -49,6 +58,16 @@ module EsAggsJsonEditor
         value: {
           terms: {
             k => []
+          }
+        }
+      }
+    end
+    match_phrases.each do |field|
+      tmpls << {
+        text: "match_phrase:#{field}",
+        value: {
+          match_phrase: {
+            "#{field}" => ''
           }
         }
       }
